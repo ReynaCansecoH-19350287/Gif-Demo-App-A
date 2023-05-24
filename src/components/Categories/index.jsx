@@ -9,7 +9,10 @@ const Categories = ({categories = [], setCategories}) => {
             setCategories={setCategories}
             />
             <br />
-            <CategoriesList categories={categories}/>
+            <CategoriesList 
+            categories={categories}
+            setCategories={setCategories}
+            />
         </div>
     )
 }
