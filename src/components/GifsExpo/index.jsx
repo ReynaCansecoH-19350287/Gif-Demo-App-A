@@ -1,24 +1,38 @@
-const GifsExpo = ({ categories = [] }) => {
+import { useState } from "react"
 
-    const getGifs = (categories) => {
-        let gifsList = []
-        categories.forEach(async (category) => {
+const GifsExpo = ({categories = []}) => {
+    const [urlList, setUrlList] = useState([])
+    const getGifs = async (categories) => {
+
+        const responsesList = await Promise.all(categories.map(async (category) => {
             const response = await fetch(
-                `https://api.giphy.com/v1/gifs/search?api_key=VeCVOs8gbHRU870IasxTSRZJ3pAXxtLq=${category}&limit=10`
+                `https://api.giphy.com/v1/gifs/search?api_key=VeCVOs8gbHRU870IasxTSRZJ3pAXxtLq&q=${category}`
             )
             const apiResponse = await response.json()
-            //console.log(apiResponse.data[0].images.fixed_width.url)
-            gifsList = apiResponse.data.map((gif) =>{
-                return gif.images.fixed_width.url
+            return apiResponse.data
+        }))
+        let gifsList = []
+        responsesList.forEach((data) => {
+            data.forEach((item) => {
+                gifsList = [...gifsList, item.images.fixed_height.url.split('?')[0]]
             })
         })
-        console.log(gifsList)
+        setUrlList([...gifsList])
     }
-    
     getGifs(categories)
 
     return (
-        <h4>GitExpo</h4>
+        <>
+        <div>
+            {
+                urlList.map((url) => {
+                    return (
+                        <img key={url} src={url} />
+                    )
+                })
+            }
+        </div>
+        </>
     )
 }
 
