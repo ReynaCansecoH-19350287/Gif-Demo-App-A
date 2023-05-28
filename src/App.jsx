@@ -18,6 +18,14 @@ function App() {
       categories={categories} 
       setCategories={setCategories}
       />
+      {
+        categories.length === 0 && (
+          <div className='text-center'>
+            <h3>Your list is empty</h3>
+            Add a new category to get started.
+          </div>
+        )
+      }
     </div>
   )
 }
